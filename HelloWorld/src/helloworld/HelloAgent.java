@@ -1,7 +1,6 @@
 /*
  * Copyright Heathman Innovative Solutions Jul 11, 2014.
  */
-
 package helloworld;
 
 import jade.core.Agent;
@@ -18,7 +17,9 @@ public class HelloAgent extends Agent {
     @Override
     protected void setup() {
         super.setup();
-        System.out.println("Hello World from "+this.getLocalName());
+        System.out.println("Hello World from "
+                + this.getLocalName()
+                + " setup.");
     }
 
     @Override

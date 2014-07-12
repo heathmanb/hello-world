@@ -5,12 +5,18 @@ package helloworld;
 
 import jade.Boot;
 import jade.core.AID;
-import jade.wrapper.AgentContainer;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
+import jade.wrapper.AgentContainer;
+import jade.wrapper.AgentController;
+import jade.wrapper.ControllerException;
+import jade.wrapper.StaleProxyException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+import java.util.function.Predicate;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
@@ -31,7 +37,7 @@ public class HelloWorld {
         "-container-name", "HelloWorld",
         "-agents",
         "HAL:helloworld.HelloAgent"
-            +";Dave:helloworld.HelloAgent"
+        + ";Dave:helloworld.HelloAgent"
     };
     /**
      * Hello World agent container created by main.
@@ -40,32 +46,39 @@ public class HelloWorld {
 
     /**
      * Prints a simple hello world and starts the Hello World agent container.
-     * 
+     *
      * @param args the command line arguments (ignored)
      */
     public static void main(String[] args) {
-        // TODO code application logic here
         System.out.println("Hello World");
-        final Profile p = new ProfileImpl(
-                Boot.parseCmdLineArgs(BOOT_ARGS));
-        container = (AgentContainer) jade.core.Runtime.instance()
-                .createAgentContainer(p);
+        getContainer(); // Called to start the container.
+    }
+
+    /**
+     * Access the Hello World agent container.
+     *
+     * @return Hello World agent container (null if main not executed)
+     */
+    private static AgentContainer getContainer() {
+        if (container == null) {
+            final Profile p = new ProfileImpl(
+                    Boot.parseCmdLineArgs(BOOT_ARGS));
+            container = (AgentContainer) jade.core.Runtime.instance()
+                    .createAgentContainer(p);
+        }
+        return container;
     }
 
     /**
      * Access the boot agent agent identifiers.
-     * 
+     *
      * @return List of boot agent identifiers.
      */
-    public static List<AID> bootAgentAIDs() {
-        return
-        Arrays.asList(((String) getBootValue(Profile.AGENTS)).split(";"))
+    public static List<String> bootAgentNames() {
+        return Arrays.asList(((String) getBootValue(Profile.AGENTS)).split(";"))
                 .stream()
                 .map(a -> {
-                   return a.split(":")[0];
-                })
-                .map(name -> {
-                    return new AID(name,false);
+                    return a.split(":")[0];
                 })
                 .collect(Collectors.toList());
     }
@@ -107,6 +120,9 @@ public class HelloWorld {
      */
     public static Properties bootProperties() throws IllegalArgumentException {
         return Boot.parseCmdLineArgs(HelloWorld.BOOT_ARGS);
+    }
+
+    private HelloWorld() {
     }
 
 }

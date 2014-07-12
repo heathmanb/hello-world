@@ -3,10 +3,8 @@
  */
 package helloworld;
 
-import jade.core.AID;
 import jade.core.Profile;
 import java.util.Arrays;
-import java.util.List;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;
 import org.junit.Rule;
@@ -37,14 +35,14 @@ public class HelloWorldTest {
     public void main_test() {
         HelloWorld.main(null);
         assertThat("System.out test", log.getLog(),
-                both(
-                        containsString("Hello World"))
-                .and(containsString("Hello World from HAL"))
-                .and(containsString("Hello World from Dave"))
+                both(containsString("Hello World"))
+                .and(containsString("Hello World from HAL setup."))
+                .and(containsString("Hello World from Dave setup."))
         );
         assertThat("System.err test", errLog.getLog(),
                 containsString("This is JADE")
         );
+//        List<AgentController> acList = HelloWorld.bootAgentNames();
 
     }
 
@@ -75,9 +73,11 @@ public class HelloWorldTest {
     }
 
     @Test
-    public void agents_started_test() {
-        List<AID> names = HelloWorld.bootAgentAIDs();
-        System.out.println(names);
+    public void bootAgentNamesTest() {
+        assertTrue(
+                Arrays.asList(new String[]{
+                    "HAL", "Dave"
+                }).containsAll(HelloWorld.bootAgentNames()));
     }
 
     /**
