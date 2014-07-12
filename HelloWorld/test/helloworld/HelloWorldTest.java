@@ -8,7 +8,6 @@ import jade.core.Profile;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-import java.util.Set;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;
 import org.junit.Rule;
@@ -51,36 +50,73 @@ public class HelloWorldTest {
     }
 
     @Test
-    public void boot_arguments_test() {
-        Properties params = bootProperties();
-//        final Set keys = params.keySet();
-//        System.out.println(keys);
-        assertTrue("Properties keys", 
-                Arrays.asList(new String[] {
-        Profile.CONTAINER_NAME,
-        Profile.MAIN,
-        Profile.AGENTS})
-                        .containsAll(bootProperties().keySet()));
-        
+    public void boot_arguments_keys_test() {
+        assertTrue("Properties keys",
+                Arrays.asList(new String[]{
+                    Profile.CONTAINER_NAME,
+                    Profile.MAIN,
+                    Profile.AGENTS})
+                .containsAll(bootProperties().keySet()));
+    }
+
+    @Test
+    public void name_of_container() {
         assertEquals("name of container",
-                "HelloWorld",
-                params.get(Profile.CONTAINER_NAME)
+                getBootValue(Profile.CONTAINER_NAME),
+                bootProperties().get(Profile.CONTAINER_NAME)
         );
-        final List bootArgs = Arrays.asList(HelloWorld.BOOT_ARGS);
-        final int agents_pos = bootArgs.indexOf("-" + Profile.AGENTS);
-        final Object agents = params.get(Profile.AGENTS);
-        System.out.println(params);
+    }
+
+    @Test
+    public void boot_agents_test() {
         assertEquals("agents list",
-                bootArgs.get(agents_pos + 1),
-                params.get(Profile.AGENTS)
+                getBootValue(Profile.AGENTS),
+                bootProperties().get(Profile.AGENTS)
         );
     }
 
-    private Properties bootProperties() throws IllegalArgumentException {
-        final Properties params = Boot.parseCmdLineArgs(HelloWorld.BOOT_ARGS);
-        return params;
+    /**
+     * Provide {@link HelloWorld#BOOT_ARGS} as a list.
+     *
+     * @return List of HelloWorld boot arguments.
+     */
+    private static List bootArguments() {
+        final List bootArgs = Arrays.asList(HelloWorld.BOOT_ARGS);
+        return bootArgs;
     }
 
+    /**
+     * Return the value of a {@link HelloWorld#BOOT_ARGS} profile key.
+     *
+     * @param key JADE profile key
+     * @return Value of HelloWorld boot arguments
+     *
+     * @see Profile
+     */
+    private static Object getBootValue(String key) {
+        final List bootArgs = bootArguments();
+        final int keyPos = bootArgs.indexOf("-" + key);
+        if (keyPos < 0) {
+            throw new IllegalArgumentException("Key not found: " + key);
+        }
+        return bootArgs.get(keyPos + 1);
+    }
+
+    /**
+     * Uses Boot.parseCmdLineArgs to parse the HelloWorld boot arguments.
+     *
+     * @return Properties parsed from HelloWorld boot arguments.
+     * @throws IllegalArgumentException
+     * @see Boot#parseCmdLineArgs(java.lang.String[])
+     * @see HelloWorld#BOOT_ARGS
+     */
+    private static Properties bootProperties() throws IllegalArgumentException {
+        return Boot.parseCmdLineArgs(HelloWorld.BOOT_ARGS);
+    }
+
+    /**
+     * Shutdown JADE container.
+     */
     @AfterClass
     public static void shut_down_JADE() {
         jade.core.Runtime.instance().shutDown();
