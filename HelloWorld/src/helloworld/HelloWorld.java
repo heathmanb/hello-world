@@ -55,11 +55,11 @@ public class HelloWorld {
     }
 
     /**
-     * Access the Hello World agent container.
+     * Access the Hello World agent container. Creates it if not created.
      *
      * @return Hello World agent container (null if main not executed)
      */
-    private static AgentContainer getContainer() {
+    public static AgentContainer getContainer() {
         if (container == null) {
             final Profile p = new ProfileImpl(
                     Boot.parseCmdLineArgs(BOOT_ARGS));

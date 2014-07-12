@@ -4,7 +4,12 @@
 package helloworld;
 
 import jade.core.Profile;
+import jade.wrapper.AgentController;
+import jade.wrapper.ControllerException;
 import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;
 import org.junit.Rule;
@@ -32,7 +37,7 @@ public class HelloWorldTest {
      * Standard out and err tests.
      */
     @Test
-    public void main_test() {
+    public void mainTest() {
         HelloWorld.main(null);
         assertThat("System.out test", log.getLog(),
                 both(containsString("Hello World"))
@@ -42,7 +47,13 @@ public class HelloWorldTest {
         assertThat("System.err test", errLog.getLog(),
                 containsString("This is JADE")
         );
-//        List<AgentController> acList = HelloWorld.bootAgentNames();
+        HelloWorld.bootAgentNames().stream().forEach(n -> {
+            try {
+                HelloWorld.getContainer().getAgent(n);
+            } catch (ControllerException ex) {
+                fail("Agent " + n + " active.");
+            }
+        });
 
     }
 
