@@ -3,12 +3,13 @@
  */
 package helloworld;
 
-import genetics.SubspeciesInterface;
 import genetics.DataKeyInterface;
 import genetics.Species;
-import helloworld.behaviours.Hello;
+import genetics.SubspeciesInterface;
 import helloworld.behaviours.Heartbeat;
+import helloworld.behaviours.Hello;
 import jade.core.Agent;
+import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.DataStore;
 
 /**
@@ -53,20 +54,22 @@ public class HelloAgent extends Agent implements Species {
     }
 
     public static enum DataKey implements DataKeyInterface {
+        
+        HeartRateMs(Long.class),
+        HeartbeatBehaviour(Behaviour.class);
 
-        HeartbeatBehaviour;
+        final Class<?> type;
 
-        @Override
-        public Object get(DataStore ds) {
-            return ds.get(this.name());
+        DataKey(Class<?> type) {
+            this.type = type;
         }
 
         @Override
-        public void put(Object value, DataStore ds) {
-            ds.put(this.name(), value);
+        public Class<?> getType() {
+            return type;
         }
     }
-    
+
     private Subspecies subspecies = Subspecies.Empty;
 
     public HelloAgent() {

@@ -12,7 +12,30 @@ import jade.core.behaviours.DataStore;
  */
 public interface DataKeyInterface {
 
-    public Object get(DataStore ds);
+    Class<?> getType();
 
-    public void put(Object value, DataStore ds);
+    public default boolean isValid(Object value) {
+        return getType().isInstance(value);
+    }
+
+    public default boolean isValid(DataStore ds) {
+        return getType().isInstance(get(ds));
+    }
+
+    public default void validate(Object value) {
+        if (!isValid(value)) {
+            throw new IllegalArgumentException("Invalid value: " + value);
+        }
+    }
+
+    public default Object get(DataStore ds) {
+        return ds.get(name());
+    }
+
+    public default void put(Object value, DataStore ds) {
+        validate(value);
+        ds.put(name(), value);
+    }
+
+    public String name();
 }
