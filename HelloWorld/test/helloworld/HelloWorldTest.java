@@ -3,14 +3,10 @@
  */
 package helloworld;
 
-import jade.Boot;
 import jade.core.AID;
 import jade.core.Profile;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
-import java.util.stream.Collectors;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;
 import org.junit.Rule;
@@ -59,81 +55,29 @@ public class HelloWorldTest {
                     Profile.CONTAINER_NAME,
                     Profile.MAIN,
                     Profile.AGENTS})
-                .containsAll(bootProperties().keySet()));
+                .containsAll(HelloWorld.bootProperties().keySet()));
     }
 
     @Test
     public void name_of_container() {
         assertEquals("name of container",
-                getBootValue(Profile.CONTAINER_NAME),
-                bootProperties().get(Profile.CONTAINER_NAME)
+                HelloWorld.getBootValue(Profile.CONTAINER_NAME),
+                HelloWorld.bootProperties().get(Profile.CONTAINER_NAME)
         );
     }
 
     @Test
     public void boot_agents_test() {
         assertEquals("agents list",
-                getBootValue(Profile.AGENTS),
-                bootProperties().get(Profile.AGENTS)
+                HelloWorld.getBootValue(Profile.AGENTS),
+                HelloWorld.bootProperties().get(Profile.AGENTS)
         );
     }
-    
+
     @Test
     public void agents_started_test() {
-        List<AID> names = bootAgentAIDs();
+        List<AID> names = HelloWorld.bootAgentAIDs();
         System.out.println(names);
-    }
-    
-    private static List<AID> bootAgentAIDs() {
-        return
-        Arrays.asList(((String) getBootValue(Profile.AGENTS)).split(";"))
-                .stream()
-                .map(a -> {
-                   return a.split(":")[0];
-                })
-                .map(name -> {
-                    return new AID(name,false);
-                })
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * Provide {@link HelloWorld#BOOT_ARGS} as a list.
-     *
-     * @return List of HelloWorld boot arguments.
-     */
-    private static List bootArguments() {
-        final List bootArgs = Arrays.asList(HelloWorld.BOOT_ARGS);
-        return bootArgs;
-    }
-
-    /**
-     * Return the value of a {@link HelloWorld#BOOT_ARGS} profile key.
-     *
-     * @param key JADE profile key
-     * @return Value of HelloWorld boot arguments
-     *
-     * @see Profile
-     */
-    private static Object getBootValue(String key) {
-        final List bootArgs = bootArguments();
-        final int keyPos = bootArgs.indexOf("-" + key);
-        if (keyPos < 0) {
-            throw new IllegalArgumentException("Key not found: " + key);
-        }
-        return bootArgs.get(keyPos + 1);
-    }
-
-    /**
-     * Uses Boot.parseCmdLineArgs to parse the HelloWorld boot arguments.
-     *
-     * @return Properties parsed from HelloWorld boot arguments.
-     * @throws IllegalArgumentException
-     * @see Boot#parseCmdLineArgs(java.lang.String[])
-     * @see HelloWorld#BOOT_ARGS
-     */
-    private static Properties bootProperties() throws IllegalArgumentException {
-        return Boot.parseCmdLineArgs(HelloWorld.BOOT_ARGS);
     }
 
     /**
