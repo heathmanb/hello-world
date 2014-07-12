@@ -11,9 +11,9 @@ import jade.core.behaviours.TickerBehaviour;
  *
  * @author Brad
  */
-public class HelloTicker extends TickerBehaviour {
+public class Heartbeat extends TickerBehaviour {
 
-    public HelloTicker(Agent agent, long timeout) {
+    public Heartbeat(Agent agent, long timeout) {
         super(agent, timeout);
     }
 
