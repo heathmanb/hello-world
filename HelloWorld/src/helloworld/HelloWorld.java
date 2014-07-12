@@ -4,6 +4,9 @@
 package helloworld;
 
 import jade.Boot;
+import jade.wrapper.AgentContainer;
+import jade.core.Profile;
+import jade.core.ProfileImpl;
 
 /**
  * Hello World application main for a JADE 'HelloWorld' container.
@@ -22,6 +25,7 @@ public class HelloWorld {
         "HAL:helloworld.HelloAgent"
             +";Dave:helloworld.HelloAgent"
     };
+    private static AgentContainer container;
 
     /**
      * @param args the command line arguments
@@ -29,7 +33,11 @@ public class HelloWorld {
     public static void main(String[] args) {
         // TODO code application logic here
         System.out.println("Hello World");
-        Boot.main(BOOT_ARGS);
+        final Profile p = new ProfileImpl(
+                Boot.parseCmdLineArgs(BOOT_ARGS));
+        container = (AgentContainer) jade.core.Runtime.instance()
+                .createAgentContainer(p);
+//        Boot.main(BOOT_ARGS);
     }
 
 }

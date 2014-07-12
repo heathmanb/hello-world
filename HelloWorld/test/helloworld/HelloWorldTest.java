@@ -4,10 +4,13 @@
 package helloworld;
 
 import jade.Boot;
+import jade.core.AID;
 import jade.core.Profile;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
+import java.util.stream.Collectors;
 import org.junit.AfterClass;
 import static org.junit.Assert.*;
 import org.junit.Rule;
@@ -73,6 +76,25 @@ public class HelloWorldTest {
                 getBootValue(Profile.AGENTS),
                 bootProperties().get(Profile.AGENTS)
         );
+    }
+    
+    @Test
+    public void agents_started_test() {
+        List<AID> names = bootAgentAIDs();
+        System.out.println(names);
+    }
+    
+    private static List<AID> bootAgentAIDs() {
+        return
+        Arrays.asList(((String) getBootValue(Profile.AGENTS)).split(";"))
+                .stream()
+                .map(a -> {
+                   return a.split(":")[0];
+                })
+                .map(name -> {
+                    return new AID(name,false);
+                })
+                .collect(Collectors.toList());
     }
 
     /**
