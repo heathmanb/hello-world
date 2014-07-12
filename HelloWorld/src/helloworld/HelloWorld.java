@@ -4,19 +4,12 @@
 package helloworld;
 
 import jade.Boot;
-import jade.core.AID;
 import jade.core.Profile;
 import jade.core.ProfileImpl;
 import jade.wrapper.AgentContainer;
-import jade.wrapper.AgentController;
-import jade.wrapper.ControllerException;
-import jade.wrapper.StaleProxyException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Properties;
-import java.util.function.Predicate;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
