@@ -10,7 +10,6 @@ import helloworld.behaviours.Heartbeat;
 import helloworld.behaviours.Hello;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
-import jade.core.behaviours.DataStore;
 
 /**
  * Basic Hello World agent. Prints 'Hello World from {name} setup.' when it
@@ -41,16 +40,20 @@ public class HelloAgent extends Agent implements Species {
         Heartbeat;
 
         @Override
-        public void initialize(Agent agent) {
+        public void initialize(Agent agent, Object... args) {
             switch (this) {
                 case Heartbeat:
-                    agent.addBehaviour(new Heartbeat(agent, 1000));
+                    agent.addBehaviour(
+                            new Heartbeat(agent,
+                                     (Long) getArg(0, 1000L, args))
+                    );
                     break;
                 case Simple:
                     agent.addBehaviour(new Hello(agent));
                     break;
             }
         }
+
     }
 
     public static enum DataKey implements DataKeyInterface {
@@ -58,9 +61,9 @@ public class HelloAgent extends Agent implements Species {
         HeartRateMs(Long.class),
         HeartbeatBehaviour(Behaviour.class);
 
-        final Class<?> type;
+        private final Class<?> type;
 
-        DataKey(Class<?> type) {
+        private DataKey(Class<?> type) {
             this.type = type;
         }
 
@@ -70,6 +73,7 @@ public class HelloAgent extends Agent implements Species {
         }
     }
 
+    @SuppressWarnings("FieldMayBeFinal")
     private Subspecies subspecies = Subspecies.Empty;
 
     public HelloAgent() {
