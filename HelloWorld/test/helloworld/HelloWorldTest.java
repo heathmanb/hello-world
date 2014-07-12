@@ -3,31 +3,18 @@
  */
 package helloworld;
 
-import static org.junit.Assert.*;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.contrib.java.lang.system.StandardOutputStreamLog;
-import static org.junit.matchers.JUnitMatchers.*;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
 
 /**
  *
  * @author Brad
  */
+@RunWith(Suite.class)
+@Suite.SuiteClasses({
+//    System_err_Test.class,
+    System_out_Test.class
+})
 public class HelloWorldTest {
-
-    @Rule
-    public final StandardOutputStreamLog log = new StandardOutputStreamLog();
-
-    public HelloWorldTest() {
-    }
-
-    /**
-     * Test of main method, of class HelloWorld.
-     */
-    @Test
-    public void testMain() {
-        HelloWorld.main(null);
-        assertThat(log.getLog(), containsString("Hello World"));
-    }
 
 }
