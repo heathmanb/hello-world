@@ -53,11 +53,16 @@ public class HelloWorld {
      * @return Hello World agent container (null if main not executed)
      */
     public static AgentContainer getContainer() {
+
         if (container == null) {
             final Profile p = new ProfileImpl(
                     Boot.parseCmdLineArgs(BOOT_ARGS));
-            container = (AgentContainer) jade.core.Runtime.instance()
-                    .createAgentContainer(p);
+            try {
+                container = (AgentContainer) jade.core.Runtime.instance()
+                        .createAgentContainer(p);
+            } catch (IllegalStateException ex) {
+                // Discard because in single container mode.
+            }
         }
         return container;
     }
