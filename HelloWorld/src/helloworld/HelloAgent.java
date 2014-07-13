@@ -10,6 +10,7 @@ import helloworld.behaviours.Heartbeat;
 import helloworld.behaviours.Hello;
 import jade.core.Agent;
 import jade.core.behaviours.Behaviour;
+import static genetics.SubspeciesInterface.getArg;
 
 /**
  * Basic Hello World agent. Prints 'Hello World from {name} setup.' when it

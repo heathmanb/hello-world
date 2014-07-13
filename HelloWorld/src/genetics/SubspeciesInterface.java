@@ -14,13 +14,13 @@ public interface SubspeciesInterface {
 
     public void initialize(Agent agent, Object... args);
 
-    public default Object getArg(int index, Object defaultV, Object... args) {
+    public static Object getArg(int index, Object defaultV, Object... args) {
         if (args == null                    // Arguments missing
                 || index < 0                // Index to0 low
                 || index > args.length - 1  // Index too high
                 || args[index] == null      // Value is null
-                || defaultV == null         // Default is null
-                || !defaultV.getClass().isInstance(args[index]) ) {
+                || (defaultV != null         // Default is null
+                && !defaultV.getClass().isInstance(args[index]) )) {
             return defaultV;
         } else {
             return args[index];
