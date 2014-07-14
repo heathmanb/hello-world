@@ -21,8 +21,10 @@ public class Hello extends OneShotBehaviour {
         //TODO: action for Hello.
         System.out.println(
                 "Hello World from "
-                + this.myAgent.getLocalName()
-                + " behaviour."
+                + (myAgent == null
+                        ? "unnamed"
+                        : myAgent.getLocalName())
+                + "."
         );
     }
 

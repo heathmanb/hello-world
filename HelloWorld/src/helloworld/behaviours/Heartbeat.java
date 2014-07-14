@@ -19,7 +19,7 @@ public class Heartbeat extends TickerBehaviour {
 
     @Override
     public void  onTick() {
-        this.myAgent.addBehaviour(new Hello(myAgent));
+        myAgent.addBehaviour(new Hello(myAgent));
     }
 
 }
